@@ -147,9 +147,9 @@ class CairoRenderer:
 
     def render(self, scene, time, moving_mobjects):
         self.update_frame(scene, moving_mobjects)
-        self.add_frame(self.get_frame())
+        self.add_frame(self.get_frame(copy=False))
 
-    def get_frame(self):
+    def get_frame(self, copy=True):
         """
         Gets the current frame as NumPy array.
 
@@ -159,7 +159,7 @@ class CairoRenderer:
             NumPy array of pixel values of each pixel in screen.
             The shape of the array is height x width x 3
         """
-        return np.array(self.camera.pixel_array)
+        return np.array(self.camera.pixel_array, copy=copy)
 
     def add_frame(self, frame: np.ndarray, num_frames: int = 1):
         """
@@ -189,7 +189,7 @@ class CairoRenderer:
         """
         dt = 1 / self.camera.frame_rate
         self.add_frame(
-            self.get_frame(),
+            self.get_frame(copy=False),
             num_frames=int(duration / dt),
         )
 
